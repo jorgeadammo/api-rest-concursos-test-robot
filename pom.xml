@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+	
+    <groupId>org.robotframework</groupId>
+    <artifactId>robotframework-maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+    <version>2.1.0</version>
+    <name>Robot Framework Maven Plugin</name>
+    <description>Maven plugin for the Robot Framework.</description>
+    
+    <properties>
+		<java.version>1.8</java.version>
+        <timestamp>${maven.build.timestamp}</timestamp>
+		<maven.build.timestamp.locale>pt_BR</maven.build.timestamp.locale>
+		<project.encoding>UTF-8</project.encoding>
+		<project.build.sourceEncoding>${project.encoding}</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>${project.encoding}</project.reporting.outputEncoding>
+		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format> <!-- yyyy-MM-dd_HH-mm -->
+		<allure.results.directory>${project.basedir}/target/site/allure/result/${timestamp}</allure.results.directory>
+		<allure.report.directory>${project.basedir}/target/site/allure/report/${timestamp}</allure.report.directory>
+    </properties>
+
+    <dependencies>
+		<!-- https://mvnrepository.com/artifact/com.github.hi-fi/robotframework-seleniumlibrary -->
+ 		<dependency>
+			<groupId>com.github.hi-fi</groupId>
+			<artifactId>robotframework-seleniumlibrary</artifactId>
+			<version>3.12.0.1</version>
+		</dependency>
+				
+		<!-- https://mvnrepository.com/artifact/com.oracle/ojdbc6
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0.2.0</version>
+		</dependency>
+		 -->
+		 
+		 <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+		<dependency>
+    		<groupId>org.postgresql</groupId>
+    		<artifactId>postgresql</artifactId>
+    		<version>42.2.15</version>
+		</dependency>
+		 
+		
+		<!-- https://mvnrepository.com/artifact/org.python/jython -->
+		<dependency>
+			<groupId>org.python</groupId>
+			<artifactId>jython</artifactId>
+			<version>2.7.0</version>
+		</dependency>
+		<!--
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-support</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-htmlunit-driver</artifactId>
+			<version>2.52.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-chrome-driver</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-ie-driver</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-edge-driver</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-firefox-driver</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+		-->
+		<dependency>
+    		<groupId>com.github.marketsquare</groupId>
+    		<artifactId>robotframework-httprequestlibrary</artifactId>
+    		<version>0.0.19</version>
+		</dependency>
+		<dependency>
+    		<groupId>com.github.hi-fi</groupId>
+    		<artifactId>robotframework-httprequestlibrary</artifactId>
+    		<version>0.0.16</version>
+		</dependency>
+	</dependencies>
+
+    <build>
+        <plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>auto-clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>${project.basedir}/target</directory>
+									<includes>**/site/**</includes>
+								</fileset>
+							</filesets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>2.22.0</version>
+					</dependency>
+				</dependencies>
+				<configuration>     
+					<parallel>methods</parallel>     
+					<threadCount>1</threadCount>   
+					<property>
+						<name>allure.results.directory</name>
+						<value>${allure.results.directory}</value>
+					</property>
+					<property>
+						<name>allure.report.directory</name>
+						<value>${allure.report.directory}</value>
+					</property>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<encoding>${project.encoding}</encoding>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<outputDirectory>${project.basedir}/src/main/resources</outputDirectory> <!-- Diretórios das resources maven-compiler-plugin -->
+				</configuration>
+				<dependencies>
+				</dependencies>
+				<goals>
+					<goal>run --reportTitle index.html --logTitle log.html</goal>
+				</goals>
+		    </plugin>
+
+			<plugin>
+				<groupId>org.robotframework</groupId>
+				<artifactId>robotframework-maven-plugin</artifactId>
+				<version>1.4.7</version>
+				<executions>
+					<execution>
+					<goals>
+						<goal>clean</goal>
+					</goals>
+					</execution>
+				</executions> 
+				<configuration>
+					<testCasesDirectory>${project.basedir}/src/suite/GRA</testCasesDirectory> <!-- Diretórios dos casos de teste -->
+					<outputDirectory>${project.basedir}/target/site/${timestamp}</outputDirectory> <!-- Output dos relatórios | ${timestamp} -->
+					<extraPathDirectories>
+						<extraPathDirectory>${project.basedir}/src/main/resources</extraPathDirectory> <!-- Diretórios das resources -->
+					</extraPathDirectories>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.robotframework</groupId>
+						<artifactId>robotframework</artifactId>
+						<version>3.0.4</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+				<configuration>
+					<outputDirectory>${project.basedir}/target/site/${timestamp}</outputDirectory> <!-- Diretório para subir pro nexus | ${timestamp}-->
+					<skipTests>${skipAllTests}</skipTests>
+					<encoding>${project.encoding}</encoding>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-ssh</artifactId>
+						<version>3.1.0</version>
+					</dependency>
+				</dependencies>	
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.8</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.shared</groupId>
+						<artifactId>maven-shared-jar</artifactId>
+						<version>1.1</version>
+						<exclusions>
+							<exclusion>
+								<groupId>org.apache.bcel</groupId>
+								<artifactId>bcel</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>com.google.code.findbugs</groupId>
+						<artifactId>bcel-findbugs</artifactId>
+						<version>6.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+        </plugins>
+		
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav-jackrabbit</artifactId>
+				<version>3.0.0</version>
+			</extension>
+		</extensions>
+    </build>
+
+	
+	<reporting>
+		<plugins>
+
+		</plugins>
+    </reporting>
+
+</project>

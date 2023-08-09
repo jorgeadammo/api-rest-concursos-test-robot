@@ -62,8 +62,6 @@ Deletar uma banca
     Log                 ${RESPOSTA_DELETE.json()}
     Set Test Variable   ${RESPOSTA_DELETE}
 
-Então a API irá retornar os dados do cadastro da Banca respondendo o código  ${STATUSCODE_DESEJADO2}
-  Conferir status code  201
 ####################CONFERÊNCIAS
 Conferir status code GET
   [Arguments]                       ${STATUSCODE_DESEJADO}
